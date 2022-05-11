@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-jgpsv2co!5i534azz@0l#vk3k9@((-43af5&lli_e-=i+h8sh)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'learning.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
