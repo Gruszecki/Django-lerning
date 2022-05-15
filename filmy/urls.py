@@ -15,8 +15,9 @@ Including another URLconf
 """
 
 from django.urls import path
-from filmy.views import all_films_view
+from filmy.views import all_films_view, new_film_view
 
 urlpatterns = [
     path('all/', all_films_view),
+    path('new/', new_film_view),
 ]

@@ -18,7 +18,7 @@
         <p>Baza filmów jest jeszcze pusta.</p>
     {% else %}
         {% for film in films %}
-            <p>{{ film.title }} ({{ film.year }})</p>
+            <h3>{{ film.title }} ({{ film.year }})</h3>
             <p>{{ film.desc }}</p><br>
         {% endfor %}
     {% endif %}
