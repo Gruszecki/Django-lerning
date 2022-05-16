@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import Film
 from .forms import FilmForm
@@ -15,7 +15,19 @@ def new_film_view(request):
 
     if form.is_valid():
         form.save()
-    else:
-        return render(request, 'new_film.html', {'form': form})
+        return redirect(all_films_view)
 
-    return render(request, 'filmy.html', {'dynamic_content': 'Dodano nowy film', 'films': Film.objects.all()})
+    return render(request, 'new_film.html', {'form': form})
+
+
+def edit_film_view(request, id):
+    film = get_object_or_404(Film, pk=id)
+    form = FilmForm(request.POST or None, request.FILES or None, instance=film)
+
+    if form.is_valid():
+        form.save()
+        return redirect(all_films_view)
+
+    return render(request, 'new_film.html', {'form': form})
+
+
