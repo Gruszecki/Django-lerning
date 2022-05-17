@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'filmy.css' %}">
 </head>
 <body>
+    <a href="{% url 'logout' %}">Log out</a>
     <h1>All films from database</h1>
     <p>Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).</p><br>
     <h2>{{ dynamic_content }}</h2>
