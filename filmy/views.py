@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
 from .models import Film
 from .forms import FilmForm
+from django.contrib.auth.decorators import login_required
 
 
 def all_films_view(request):
@@ -10,6 +10,7 @@ def all_films_view(request):
     return render(request, 'filmy.html', {'dynamic_content': dynamic, 'films': films})
 
 
+@login_required()
 def new_film_view(request):
     form = FilmForm(request.POST or None, request.FILES or None)
 
@@ -20,6 +21,7 @@ def new_film_view(request):
     return render(request, 'film.html', {'form': form})
 
 
+@login_required()
 def edit_film_view(request, id):
     film = get_object_or_404(Film, pk=id)
     form = FilmForm(request.POST or None, request.FILES or None, instance=film)
@@ -31,6 +33,7 @@ def edit_film_view(request, id):
     return render(request, 'film.html', {'form': form})
 
 
+@login_required()
 def delete_film_view(request, id):
     film = get_object_or_404(Film, pk=id)
 
