@@ -12,6 +12,8 @@
     <form method="post">
         {% csrf_token %}
         <button type="submit">Usuń trwale</button>
+        <br><br>
+        <a href="{% url 'all_films_view' %}">Back</a>
     </form>
 </body>
 </html>

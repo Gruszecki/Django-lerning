@@ -14,12 +14,17 @@
     <p>Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).</p><br>
     <h2>{{ dynamic_content }}</h2>
 
+    <a style="font-size: 25px"  href="{% url 'new_film_view' %}">&emsp;&emsp;&emsp;&emsp;New film&emsp;&emsp;&emsp;&emsp;</a>
+
     {% if films|length == 0 %}
         <p>Baza filmów jest jeszcze pusta.</p>
     {% else %}
         {% for film in films %}
             <h3>{{ film.title }} ({{ film.year }})</h3>
-            <p>{{ film.desc }}</p><br>
+            <p>{{ film.desc }}</p>
+            <a href="{% url 'edit_film_view' film.id %}">Edit</a>
+            <a href="{% url 'delete_film_view' film.id %}">Delete</a>
+            <br><br>
         {% endfor %}
     {% endif %}
 </body>

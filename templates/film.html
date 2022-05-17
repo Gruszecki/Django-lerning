@@ -12,6 +12,8 @@
         {% csrf_token %}
         {{ form }}
         <button type="submit">Submit</button>
+        <br><br>
+        <a href="{% url 'all_films_view' %}">Back</a>
     </form>
 </body>
 </html>
