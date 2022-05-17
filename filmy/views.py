@@ -17,7 +17,7 @@ def new_film_view(request):
         form.save()
         return redirect(all_films_view)
 
-    return render(request, 'new_film.html', {'form': form})
+    return render(request, 'film.html', {'form': form})
 
 
 def edit_film_view(request, id):
@@ -28,6 +28,14 @@ def edit_film_view(request, id):
         form.save()
         return redirect(all_films_view)
 
-    return render(request, 'new_film.html', {'form': form})
+    return render(request, 'film.html', {'form': form})
 
 
+def delete_film_view(request, id):
+    film = get_object_or_404(Film, pk=id)
+
+    if request.method == 'POST':
+        film.delete()
+        return redirect(all_films_view)
+
+    return render(request, 'confirm.html', {'film': film})
