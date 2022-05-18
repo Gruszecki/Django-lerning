@@ -1,11 +1,20 @@
 {% extends 'main.html' %}
-
+{% load bootstrap %}
 {% block title %}Project: film | Login{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Log in</button>
-    </form>
+
+<div align="center">
+    <div class="card" style="width: 18rem;" align="left">
+        <div class="card-body">
+            <h5 class="card-title">Hello unknown user</h5>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|bootstrap }}
+                <br>
+                <button type="submit" class="btn btn-outline-secondary">Log in <i class="fa-solid fa-right-to-bracket"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

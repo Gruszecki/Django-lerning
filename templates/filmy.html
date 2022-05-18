@@ -5,7 +5,9 @@
 {% block body %}
     {% if user.is_authenticated %}
         Zalogowano jako: {{ user.username }}
-        (<a href="{% url 'logout' %}">wyloguj</a>)
+        <a class="btn" href="{% url 'logout' %}">
+            <i class="fa-solid fa-user-large-slash"></i>
+        </a>
     {% else %}
         <a href="{% url 'login' %}">Log in</a>
     {% endif %}
@@ -13,20 +15,30 @@
     <hr>
 
     <h1>All films from database</h1>
-    <p>Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).</p><br>
-    <h2>{{ dynamic_content }}</h2>
 
-    <a style="font-size: 25px"  href="{% url 'new_film_view' %}">&emsp;&emsp;&emsp;&emsp;New film&emsp;&emsp;&emsp;&emsp;</a>
+    Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).<br>
+    <a class="btn" href="{% url 'new_film_view' %}" style="color:#d2ccc6;">
+        Add new film
+        <i class="fa-solid fa-film"></i>
+    </a>
+    <br><br>
 
     {% if films|length == 0 %}
         <p>Baza filmów jest jeszcze pusta.</p>
     {% else %}
         {% for film in films %}
-            <h3>{{ film.title }} ({{ film.year }})</h3>
-            <p>{{ film.desc }}</p>
-            <a href="{% url 'edit_film_view' film.id %}">Edit</a>
-            <a href="{% url 'delete_film_view' film.id %}">Delete</a>
-            <br><br>
+            <h3>{{ film.title }} ({{ film.year }})
+                <a class="btn" href="{% url 'edit_film_view' film.id %}">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+
+                <a class="btn"  href="{% url 'delete_film_view' film.id %}">
+                    <i class="fa-regular fa-trash-can"></i>
+                </a>
+            </h3>
+
+            <p>{{ film.desc }}</p><br>
+
         {% endfor %}
     {% endif %}
 {% endblock %}

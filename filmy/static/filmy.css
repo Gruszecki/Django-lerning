@@ -1,12 +1,13 @@
 body {
-    background-color: #009999;
-
+    padding: 2rem;
+    background-color: #85786b;
+    color: #39332d;
 }
 
 h1 {
-    color: yellow;
+    color: #e8e6e3;
 }
 
 h2 {
-    color: orange;
+    color: #d2ccc6;
 }
