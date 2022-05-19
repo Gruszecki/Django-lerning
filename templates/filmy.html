@@ -6,7 +6,7 @@
     {% if user.is_authenticated %}
         Zalogowano jako: {{ user.username }}
         <a class="btn" href="{% url 'logout' %}">
-            <i class="fa-solid fa-user-large-slash"></i>
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </a>
     {% else %}
         <a href="{% url 'login' %}">Log in</a>

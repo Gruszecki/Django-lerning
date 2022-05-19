@@ -6,8 +6,10 @@
     <h1>Czy na pewno chcesz usunąć {{ film.title }}?</h1>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Usuń trwale</button>
+        <button type="submit" class="btn btn-outline-dark">Usuń trwale</button>
         <br><br>
-        <a href="{% url 'all_films_view' %}">Back</a>
+        <a class="btn"  href="{% url 'all_films_view' %}">
+            <i class="fa-solid fa-angles-left">  Back</i>
+        </a>
     </form>
 {% endblock %}
