@@ -27,18 +27,27 @@
         <p>Baza filmów jest jeszcze pusta.</p>
     {% else %}
         {% for film in films %}
-            <h3>{{ film.title }} ({{ film.year }})
-                <a class="btn" href="{% url 'edit_film_view' film.id %}">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </a>
+            <div align="center">
+                <div class="card" style="width: 64rem" align="left">
+                    <div class="card-body">
+                        <img src="/media/{{film.poster}}" class="film-poster">
+                        <div class="row">
+                            <h3>{{ film.title }} ({{ film.year }})
+                                <a class="btn" href="{% url 'edit_film_view' film.id %}">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </a>
 
-                <a class="btn"  href="{% url 'delete_film_view' film.id %}">
-                    <i class="fa-regular fa-trash-can"></i>
-                </a>
-            </h3>
-
-            <p>{{ film.desc }}</p><br>
-
+                                <a class="btn"  href="{% url 'delete_film_view' film.id %}">
+                                    <i class="fa-regular fa-trash-can"></i>
+                                </a>
+                            </h3>
+                        </div>
+                        <div class="row">
+                            <p class="card-text desc">{{ film.desc }}</p><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
     {% endif %}
 {% endblock %}

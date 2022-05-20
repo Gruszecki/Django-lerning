@@ -27,6 +27,7 @@ def edit_film_view(request, id):
     form = FilmForm(request.POST or None, request.FILES or None, instance=film)
 
     if form.is_valid():
+        film.poster = 'posters/default.jpg' if not film.poster else film.poster
         form.save()
         return redirect(all_films_view)
 

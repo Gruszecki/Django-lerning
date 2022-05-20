@@ -11,3 +11,9 @@ h1 {
 h2 {
     color: #d2ccc6;
 }
+
+.film-poster {
+    width: 150px;
+    float: left;
+}
+
