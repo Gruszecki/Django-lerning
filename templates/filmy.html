@@ -14,6 +14,7 @@
 
     <hr>
 
+    <div class="container" style="width: 64rem">
     <h1>All films from database</h1>
 
     Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).<br>
@@ -22,6 +23,7 @@
         <i class="fa-solid fa-film"></i>
     </a>
     <br><br>
+        </div>
 
     {% if films|length == 0 %}
         <p>Baza filmów jest jeszcze pusta.</p>
