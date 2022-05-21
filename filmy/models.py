@@ -27,3 +27,8 @@ class Film(models.Model):
     def title_and_date(self):
         return f'{self.title} ({self.year})'
 
+
+class Rating(models.Model):
+    rating = models.PositiveSmallIntegerField(null=True, blank=True)
+    review = models.TextField(default='', blank=True)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE)
