@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Film
-from .forms import FilmForm
+from .models import Film, AdditionalInfo
+from .forms import FilmForm, AdditionalInfoForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,26 +12,40 @@ def all_films_view(request):
 
 @login_required()
 def new_film_view(request):
-    form = FilmForm(request.POST or None, request.FILES or None)
+    film_form = FilmForm(request.POST or None, request.FILES or None)
+    info_form = AdditionalInfoForm(request.POST or None)
 
-    if form.is_valid():
-        form.save()
+    if all((film_form.is_valid(), info_form.is_valid())):
+        film = film_form.save(commit=False)
+        info = info_form.save()
+        film.additional_info = info
+        film.save()
         return redirect(all_films_view)
 
-    return render(request, 'film.html', {'form': form, 'is_new': True})
+    return render(request, 'film.html', {'film_form': film_form, 'info_form': info_form, 'is_new': True})
 
 
 @login_required()
 def edit_film_view(request, id):
     film = get_object_or_404(Film, pk=id)
-    form = FilmForm(request.POST or None, request.FILES or None, instance=film)
 
-    if form.is_valid():
+    try:
+        info = AdditionalInfo.objects.get(film=film.id)
+    except AdditionalInfo.DoesNotExist:
+        info = None
+
+    film_form = FilmForm(request.POST or None, request.FILES or None, instance=film)
+    info_form = AdditionalInfoForm(request.POST or None, instance=info)
+
+    if film_form.is_valid():
         film.poster = 'posters/default.jpg' if not film.poster else film.poster
-        form.save()
+        film = film_form.save(commit=False)
+        info = info_form.save()
+        film.additional_info = info
+        film.save()
         return redirect(all_films_view)
 
-    return render(request, 'film.html', {'form': form, 'is_new': False, 'film': film})
+    return render(request, 'film.html', {'film_form': film_form, 'info_form': info_form, 'is_new': False, 'film': film})
 
 
 @login_required()

@@ -14,7 +14,8 @@
         <div class="card-body">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form|bootstrap }}
+            {{ film_form|bootstrap }}
+            {{ info_form|bootstrap }}
             {% if is_new %}
                 <button type="submit" class="btn btn-outline-dark">Add film</button>
             {% else %}
