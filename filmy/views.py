@@ -1,13 +1,26 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Film, AdditionalInfo
+from .models import Film, AdditionalInfo, Rating
 from .forms import FilmForm, AdditionalInfoForm
 from django.contrib.auth.decorators import login_required
 
 
+def get_film_with_ratings(films):
+    avg_ratings = []
+
+    for film in films:
+        ratings = Rating.objects.filter(film=film)
+        avg_temp_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
+        avg_temp = avg_temp_sum / len(ratings) if len(ratings) > 0 else 0
+        avg_ratings.append((film, avg_temp))
+
+    return avg_ratings
+
+
 def all_films_view(request):
-    dynamic = 'Dynamic content'
     films = Film.objects.all()
-    return render(request, 'filmy.html', {'dynamic_content': dynamic, 'films': films})
+    film_with_ratings = get_film_with_ratings(films)
+
+    return render(request, 'filmy.html', {'films_length': len(films), 'film_with_ratings': film_with_ratings})
 
 
 @login_required()
