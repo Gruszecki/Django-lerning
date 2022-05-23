@@ -11,7 +11,8 @@ def get_film_with_ratings(films):
         ratings = Rating.objects.filter(film=film)
         avg_temp_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
         avg_temp = avg_temp_sum / len(ratings) if len(ratings) > 0 else 0
-        avg_ratings.append((film, avg_temp))
+        reviews = [Rating._meta.get_field('review').value_from_object(rating) for rating in ratings]
+        avg_ratings.append((film, avg_temp, reviews))
 
     return avg_ratings
 

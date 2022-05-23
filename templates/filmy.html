@@ -28,7 +28,7 @@
     {% if films_length == 0 %}
         <p>Baza filmów jest jeszcze pusta.</p>
     {% else %}
-        {% for film, rating in film_with_ratings %}
+        {% for film, rating, reviews in film_with_ratings %}
             <div align="center">
                 <div class="card" style="width: 64rem" align="left">
                     <div class="card-body">
@@ -49,6 +49,26 @@
                         </div>
                         <div class="row">
                             <p class="card-text desc">{{ film.desc }}</p><br>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {% if reviews|length > 0 %}
+                                    <div class="row" style="padding-left: 10px;">
+                                        <div class="card" style="width: 24rem;">
+                                            <ul class="list-group list-group-flush">
+                                                {% for review in reviews %}
+                                                    {% if review|length > 0 %}
+                                                        <li class="list-group-item">{{ review }}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                Oceń
+                            </div>
                         </div>
                     </div>
                 </div>
