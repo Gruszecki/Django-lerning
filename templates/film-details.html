@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+{% load bootstrap %}
+
+{% block title %}Project: film | Edit{% endblock %}
+
+{% block body %}
+
+<div align="center">
+    <div class="container-sm" style="width: 50rem;" align="left">
+
+
+        <h2>
+            {{ film.title }}
+            <div style="float: right">
+                {{ rating }} <i class="fa-solid fa-star"></i>
+            </div>
+        </h2>
+        <br>
+
+        <div class="card" style="width: 20rem; float: right;">
+            <h5>Add rating</h5>
+            <form method="post">
+                {% csrf_token %}
+                {{ rating_form|bootstrap }}
+                <br>
+                <button type="submit" class="btn btn-outline-dark">Send</button>
+            </form>
+        </div>
+        Description:<br>
+        {{ film.desc }}<br><br>
+
+        Runtime: {{ info.runtime }} min<br>
+        Genre: {{ info.get_genre_display }}<br>
+        Year: {{ film.year }}<br>
+        Rating IMDB: {{ film.rating_imdb }}<br>
+
+
+        <br><br>
+            <a class="btn"  href="{% url 'all_films_view' %}">
+                <i class="fa-solid fa-angles-left">  Back</i>
+            </a>
+    </div>
+</div>
+
+{% endblock %}
+
+

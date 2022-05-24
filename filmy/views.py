@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Film, AdditionalInfo, Rating
-from .forms import FilmForm, AdditionalInfoForm
+from .forms import FilmForm, AdditionalInfoForm, RatingForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -36,7 +36,7 @@ def new_film_view(request):
         film.save()
         return redirect(all_films_view)
 
-    return render(request, 'film.html', {'film_form': film_form, 'info_form': info_form, 'is_new': True})
+    return render(request, 'film-edit.html', {'film_form': film_form, 'info_form': info_form, 'is_new': True})
 
 
 @login_required()
@@ -59,7 +59,7 @@ def edit_film_view(request, id):
         film.save()
         return redirect(all_films_view)
 
-    return render(request, 'film.html', {'film_form': film_form, 'info_form': info_form, 'is_new': False, 'film': film})
+    return render(request, 'film-edit.html', {'film_form': film_form, 'info_form': info_form, 'is_new': False, 'film': film})
 
 
 @login_required()
@@ -71,3 +71,20 @@ def delete_film_view(request, id):
         return redirect(all_films_view)
 
     return render(request, 'confirm.html', {'film': film})
+
+
+def film_details_view(request, id):
+    film = get_object_or_404(Film, pk=id)
+
+    try:
+        info = AdditionalInfo.objects.get(film=film.id)
+    except AdditionalInfo.DoesNotExist:
+        info = None
+
+    rating_form = RatingForm(request.POST or None)
+
+    ratings = Rating.objects.filter(film=film)
+    ratings_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
+    avg_rating = ratings_sum / len(ratings) if len(ratings) > 0 else 0
+
+    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form})

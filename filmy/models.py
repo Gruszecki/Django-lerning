@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class AdditionalInfo(models.Model):
     GENRE = {
@@ -29,7 +29,7 @@ class Film(models.Model):
 
 
 class Rating(models.Model):
-    rating = models.PositiveSmallIntegerField(null=True, blank=True)
+    rating = models.PositiveSmallIntegerField(null=True, blank=True, default=0, validators=[MaxValueValidator(5), MinValueValidator(1)])
     review = models.TextField(default='', blank=True)
     film = models.ForeignKey(Film, on_delete=models.CASCADE)
 

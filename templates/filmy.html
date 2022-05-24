@@ -34,7 +34,10 @@
                     <div class="card-body">
                         <img src="/media/{{film.poster}}" class="film-poster">
                         <div class="row">
-                            <h3>{{ film.title }} ({{ film.year }})
+                            <h3>
+                                <a class="h3" href="{% url 'film_details_view' film.id %}" style="text-decoration: none;">
+                                    {{ film.title }} ({{ film.year }})
+                                </a>
                                 <a class="btn" href="{% url 'edit_film_view' film.id %}">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </a>
