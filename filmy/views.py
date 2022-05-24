@@ -73,6 +73,13 @@ def delete_film_view(request, id):
     return render(request, 'confirm.html', {'film': film})
 
 
+def get_avg_rating(film):
+    ratings = Rating.objects.filter(film=film)
+    ratings_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
+    avg_rating = ratings_sum / len(ratings) if len(ratings) > 0 else 0
+
+    return avg_rating
+
 def film_details_view(request, id):
     film = get_object_or_404(Film, pk=id)
 
@@ -82,9 +89,13 @@ def film_details_view(request, id):
         info = None
 
     rating_form = RatingForm(request.POST or None)
+    avg_rating = get_avg_rating(film)
 
-    ratings = Rating.objects.filter(film=film)
-    ratings_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
-    avg_rating = ratings_sum / len(ratings) if len(ratings) > 0 else 0
+
+    if request.method == 'POST':
+        rating = rating_form.save(commit=False)
+        rating.film = film
+        rating.save()
+        avg_rating = get_avg_rating(film)
 
     return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form})

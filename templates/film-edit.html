@@ -16,11 +16,13 @@
             {% csrf_token %}
             {{ film_form|bootstrap }}
             {{ info_form|bootstrap }}
-            {% if is_new %}
-                <button type="submit" class="btn btn-outline-dark">Add film</button>
-            {% else %}
-                <button type="submit" class="btn btn-outline-dark">Edit film</button>
-            {% endif %}
+            <button type="submit" class="btn btn-outline-dark">
+                {% if is_new %}
+                    Add film
+                {% else %}
+                    Edit film
+                {% endif %}
+             </button>
             <br><br>
             <a class="btn"  href="{% url 'all_films_view' %}">
                 <i class="fa-solid fa-angles-left">  Back</i>
