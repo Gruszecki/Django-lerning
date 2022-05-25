@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+{% load bootstrap %}
+
+{% block title %}Project: film | Edit{% endblock %}
+
+{% block body %}
+
+<div align="center">
+    <div class="container-sm" style="width: 50rem;" align="left">
+        <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ actor_form|bootstrap }}
+            <br>
+
+            <button type="submit" class="btn btn-outline-dark">
+                Add actor
+             </button>
+            <br><br>
+            <a class="btn"  href="{% url 'all_films_view' %}">
+                <i class="fa-solid fa-angles-left">  Back</i>
+            </a>
+        </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

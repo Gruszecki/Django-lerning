@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Film, AdditionalInfo, Rating
-from .forms import FilmForm, AdditionalInfoForm, RatingForm
+from .models import Film, AdditionalInfo, Rating, Actor
+from .forms import FilmForm, AdditionalInfoForm, RatingForm, ActorForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -79,6 +79,7 @@ def get_avg_rating(film):
 
     return f'{avg_rating:.2f}'
 
+
 def get_film_reviews(film):
     ratings = Rating.objects.filter(film=film)
     reviews = [Rating._meta.get_field('review').value_from_object(rating) for rating in ratings]
@@ -88,6 +89,7 @@ def get_film_reviews(film):
 
 def film_details_view(request, id):
     film = get_object_or_404(Film, pk=id)
+    actors = Actor.objects.all()
     reviews = get_film_reviews(film)
     avg_rating = get_avg_rating(film)
     rating_form = RatingForm(request.POST or None)
@@ -108,4 +110,16 @@ def film_details_view(request, id):
             rating_form = RatingForm(None)
             avg_rating = get_avg_rating(film)
 
-    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form, 'reviews': reviews})
+    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form, 'reviews': reviews, 'actors': actors})
+
+
+@login_required()
+def new_actor_view(request):
+    actor_form = ActorForm(request.POST or None)
+    films = Film.objects.all()
+
+    if actor_form.is_valid():
+        actor_form.save()
+        return redirect(new_actor_view)
+
+    return render(request, 'new-actor.html', {'actor_form': actor_form})

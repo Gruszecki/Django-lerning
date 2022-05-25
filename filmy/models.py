@@ -37,4 +37,4 @@ class Rating(models.Model):
 class Actor(models.Model):
     first_name = models.CharField(max_length=64, blank=False)
     surname = models.CharField(max_length=64, blank=False)
-    films = models.ManyToManyField(Film)
+    films = models.ManyToManyField(Film, related_name='actors')

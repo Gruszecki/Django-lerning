@@ -14,7 +14,14 @@
                 {{ rating }} <i class="fa-solid fa-star"></i>
             </div>
         </h2>
-        <br>
+
+
+        <a href="{% url 'all_films_view' %}">
+            <button class="btn btn-outline-dark">Add actors</button>
+        </a>
+
+        <br><br>
+
 
         <div class="card" style="width: 20rem; float: right;">
             <div class="card-body" style="">
@@ -53,8 +60,6 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-
-
 
         <br><br>
         <a class="btn"  href="{% url 'all_films_view' %}">
