@@ -8,7 +8,6 @@
 <div align="center">
     <div class="container-sm" style="width: 50rem;" align="left">
 
-
         <h2>
             {{ film.title }}
             <div style="float: right">
@@ -18,14 +17,17 @@
         <br>
 
         <div class="card" style="width: 20rem; float: right;">
-            <h5>Add rating</h5>
-            <form method="post">
-                {% csrf_token %}
-                {{ rating_form|bootstrap }}
-                <br>
-                <button type="submit" class="btn btn-outline-dark">Send</button>
-            </form>
+            <div class="card-body" style="">
+                <h5>Add rating</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ rating_form|bootstrap }}
+                    <br>
+                    <button type="submit" class="btn btn-outline-dark">Send</button>
+                </form>
+            </div>
         </div>
+
         Description:<br>
         {{ film.desc }}<br><br>
 
@@ -33,12 +35,31 @@
         Genre: {{ info.get_genre_display }}<br>
         Year: {{ film.year }}<br>
         Rating IMDB: {{ film.rating_imdb }}<br>
+        <br>
+
+        <img src="/media/{{film.poster}}" class="film-poster">
+        <br>
+
+        <br><br>
+        <h5>Actors</h5>
+
+        <br><br>
+        <h5>Reviews</h5><hr>
+
+        {% if reviews|length > 0 %}
+            {% for review in reviews %}
+                {% if review|length > 0 %}
+                    {{ review }}<hr>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
 
 
         <br><br>
-            <a class="btn"  href="{% url 'all_films_view' %}">
-                <i class="fa-solid fa-angles-left">  Back</i>
-            </a>
+        <a class="btn"  href="{% url 'all_films_view' %}">
+            <i class="fa-solid fa-angles-left">  Back</i>
+        </a>
     </div>
 </div>
 

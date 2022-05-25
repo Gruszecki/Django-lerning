@@ -11,8 +11,7 @@ def get_film_with_ratings(films):
         ratings = Rating.objects.filter(film=film)
         avg_temp_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
         avg_temp = avg_temp_sum / len(ratings) if len(ratings) > 0 else 0
-        reviews = [Rating._meta.get_field('review').value_from_object(rating) for rating in ratings]
-        avg_ratings.append((film, avg_temp, reviews))
+        avg_ratings.append((film, f'{avg_temp:.2f}'))
 
     return avg_ratings
 
@@ -78,24 +77,35 @@ def get_avg_rating(film):
     ratings_sum = sum([Rating._meta.get_field('rating').value_from_object(rating) for rating in ratings])
     avg_rating = ratings_sum / len(ratings) if len(ratings) > 0 else 0
 
-    return avg_rating
+    return f'{avg_rating:.2f}'
+
+def get_film_reviews(film):
+    ratings = Rating.objects.filter(film=film)
+    reviews = [Rating._meta.get_field('review').value_from_object(rating) for rating in ratings]
+
+    return reviews
+
 
 def film_details_view(request, id):
     film = get_object_or_404(Film, pk=id)
+    reviews = get_film_reviews(film)
+    avg_rating = get_avg_rating(film)
+    rating_form = RatingForm(request.POST or None)
 
     try:
         info = AdditionalInfo.objects.get(film=film.id)
     except AdditionalInfo.DoesNotExist:
         info = None
 
-    rating_form = RatingForm(request.POST or None)
-    avg_rating = get_avg_rating(film)
-
-
     if request.method == 'POST':
-        rating = rating_form.save(commit=False)
-        rating.film = film
-        rating.save()
-        avg_rating = get_avg_rating(film)
+        try:
+            rating = rating_form.save(commit=False)
+            rating.film = film
+            rating.save()
+        except ValueError as err:
+            print(err)
+        finally:
+            rating_form = RatingForm(None)
+            avg_rating = get_avg_rating(film)
 
-    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form})
+    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form, 'reviews': reviews})

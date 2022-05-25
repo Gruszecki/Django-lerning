@@ -16,6 +16,7 @@
             {% csrf_token %}
             {{ film_form|bootstrap }}
             {{ info_form|bootstrap }}
+            <br>
             <button type="submit" class="btn btn-outline-dark">
                 {% if is_new %}
                     Add film
