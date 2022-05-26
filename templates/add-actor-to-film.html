@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+{% load bootstrap %}
+
+{% block title %}Project: film | Edit: {{film.title}}{% endblock %}
+
+{% block body %}
+
+<div align="center">
+    <div class="container-sm" style="width: 50rem;" align="left">
+        <div class="card-body">
+            <h2>{{ film.title }}</h2><br><br>
+
+
+            <form method="post">
+                {% csrf_token %}
+                {% for actor in actors %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="actors" value={{ actor.id }} id={{ actor.id }}
+                        {% if actor in saved_actors %}
+                               checked
+                        {% endif %}
+                        >
+                        <label class="form-check-label" name="actors" for={{ actor.id }}>
+                            {{ actor.first_name }} {{actor.surname }}
+                        </label>
+                    </div>
+                {% endfor %}
+
+                <br>
+                <button type="submit" class="btn btn-outline-dark">
+                    Save actors
+                 </button>
+
+            </form>
+            <br>
+
+            <a href="{% url 'new_actor_view' %}" style="color:#d2ccc6;">
+                <button class="btn btn-outline-dark">Add new actor
+                    <i class="fa-solid fa-person"></i>
+                </button>
+            </a>
+
+            <br>
+            <a class="btn"  href="{% url 'film_details_view' film.id %}">
+                <i class="fa-solid fa-angles-left">  Back</i>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

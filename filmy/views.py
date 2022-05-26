@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from .models import Film, AdditionalInfo, Rating, Actor
 from .forms import FilmForm, AdditionalInfoForm, RatingForm, ActorForm
 from django.contrib.auth.decorators import login_required
@@ -89,7 +90,7 @@ def get_film_reviews(film):
 
 def film_details_view(request, id):
     film = get_object_or_404(Film, pk=id)
-    actors = Actor.objects.all()
+    actors = film.actors.all()
     reviews = get_film_reviews(film)
     avg_rating = get_avg_rating(film)
     rating_form = RatingForm(request.POST or None)
@@ -109,6 +110,7 @@ def film_details_view(request, id):
         finally:
             rating_form = RatingForm(None)
             avg_rating = get_avg_rating(film)
+            return redirect(film_details_view, film.id)
 
     return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form, 'reviews': reviews, 'actors': actors})
 
@@ -116,10 +118,31 @@ def film_details_view(request, id):
 @login_required()
 def new_actor_view(request):
     actor_form = ActorForm(request.POST or None)
-    films = Film.objects.all()
 
     if actor_form.is_valid():
         actor_form.save()
         return redirect(new_actor_view)
 
     return render(request, 'new-actor.html', {'actor_form': actor_form})
+
+
+@login_required()
+def add_actor_to_film_view(request, id):
+    actors = Actor.objects.all().order_by('surname')
+    film = Film.objects.get(id=id)
+    saved_actors = film.actors.all()
+
+    if request.method == 'POST':
+        selected_actors = request.POST.getlist("actors")
+        for actor in saved_actors:
+            if str(actor.id) not in selected_actors:
+                film.actors.remove(Actor.objects.get(id=actor.id))
+                film.save()
+        for actor_id in selected_actors:
+            film.actors.add(Actor.objects.get(id=actor_id))
+            film.save()
+
+        messages.success(request, f'Actors added to {film.title}')
+        return redirect(film_details_view, film.id)
+
+    return render(request, 'add-actor-to-film.html', {'film': film, 'actors': actors, 'saved_actors': saved_actors})

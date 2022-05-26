@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 {% load bootstrap %}
 
-{% block title %}Project: film | Edit{% endblock %}
+{% block title %}Project: film | {{film.title}} {% endblock %}
 
 {% block body %}
 
@@ -15,13 +15,10 @@
             </div>
         </h2>
 
-
-        <a href="{% url 'all_films_view' %}">
+        <a href="{% url 'add_actor_to_film_view' film.id %}">
             <button class="btn btn-outline-dark">Add actors</button>
         </a>
-
         <br><br>
-
 
         <div class="card" style="width: 20rem; float: right;">
             <div class="card-body" style="">
@@ -49,6 +46,9 @@
 
         <br><br>
         <h5>Actors</h5>
+        {% for actor in actors %}
+            {{ actor.first_name }} {{actor.surname }}<br>
+        {% endfor %}
 
         <br><br>
         <h5>Reviews</h5><hr>
