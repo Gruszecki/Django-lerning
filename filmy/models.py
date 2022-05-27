@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+
 class AdditionalInfo(models.Model):
     GENRE = {
         (0, 'other'),

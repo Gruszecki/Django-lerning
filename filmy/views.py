@@ -3,6 +3,18 @@ from django.contrib import messages
 from .models import Film, AdditionalInfo, Rating, Actor
 from .forms import FilmForm, AdditionalInfoForm, RatingForm, ActorForm
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from .serializers import FilmSerializer, ActorSerializer
+
+
+class FilmViewSet(viewsets.ModelViewSet):
+    queryset = Film.objects.all()
+    serializer_class = FilmSerializer
+
+
+class ActorViewSet(viewsets.ModelViewSet):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerializer
 
 
 def get_film_with_ratings(films):
