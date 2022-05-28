@@ -12,23 +12,56 @@
         {% endif %}
 
         <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ film_form|bootstrap }}
-            {{ info_form|bootstrap }}
-            <br>
-            <button type="submit" class="btn btn-outline-dark">
-                {% if is_new %}
-                    Add film
-                {% else %}
-                    Edit film
-                {% endif %}
-             </button>
-            <br><br>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ film_form|bootstrap }}
+                {{ info_form|bootstrap }}
+                <br>
+<!--Button: edit-->
+                <button type="submit" class="btn btn-dark" name="edit">
+                    {% if is_new %}
+                        Add film
+                    {% else %}
+                        Edit film
+                    {% endif %}
+                </button>
+                <br><br>
+
+            </form>
+<!--Button: delete-->
+            {% if not is_new %}
+                <a data-bs-toggle="modal" data-bs-target="#confirmModal">
+                    <button type="submit" class="btn btn-outline-dark" style="float: right;">
+                        Delete film
+                    </button>
+                </a>
+
+                <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmModalLabel">Confirm</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+<!--    Confirmation-->
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    Are you sure you want to delete {{film.title}}?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-dark" name="delete">Delete <i class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+<!--Button: back-->
             <a class="btn"  href="{% url 'all_films_view' %}">
                 <i class="fa-solid fa-angles-left">  Back</i>
             </a>
-        </form>
         </div>
     </div>
 </div>

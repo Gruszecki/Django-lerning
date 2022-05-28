@@ -56,7 +56,7 @@ def new_film_view(request):
 @login_required()
 def edit_film_view(request, id):
     film = get_object_or_404(Film, pk=id)
-
+    print(request)
     try:
         info = AdditionalInfo.objects.get(film=film.id)
     except AdditionalInfo.DoesNotExist:
@@ -65,15 +65,24 @@ def edit_film_view(request, id):
     film_form = FilmForm(request.POST or None, request.FILES or None, instance=film)
     info_form = AdditionalInfoForm(request.POST or None, instance=info)
 
-    if film_form.is_valid():
-        film.poster = 'posters/default.jpg' if not film.poster else film.poster
-        film = film_form.save(commit=False)
-        info = info_form.save()
-        film.additional_info = info
-        film.save()
+    if request.method == 'POST' and 'delete' in request.POST:
+        film.delete()
+        messages.success(request, f'{film.title} deleted.')
         return redirect(all_films_view)
 
-    return render(request, 'film-edit.html', {'film_form': film_form, 'info_form': info_form, 'is_new': False, 'film': film})
+    if request.method == 'POST' and 'edit' in request.POST:
+        print('bylo edytowane')
+        if film_form.is_valid():
+            film.poster = 'posters/default.jpg' if not film.poster else film.poster
+            film = film_form.save(commit=False)
+            info = info_form.save()
+            film.additional_info = info
+            film.save()
+            messages.success(request, f'{film.title} edited.')
+            return redirect(all_films_view)
+
+    return render(request, 'film-edit.html',
+                  {'film_form': film_form, 'info_form': info_form, 'is_new': False, 'film': film})
 
 
 @login_required()
@@ -144,8 +153,8 @@ def film_details_view(request, id):
             messages.success(request, 'You must be logged in to perform this action.')
 
     return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info,
-                                                     'rating_form': rating_form, 'reviews': reviews,
-                                                     'saved_actors': saved_actors, 'actors': actors})
+                                                 'rating_form': rating_form, 'reviews': reviews,
+                                                 'saved_actors': saved_actors, 'actors': actors})
 
 
 @login_required()

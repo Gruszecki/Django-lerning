@@ -69,13 +69,9 @@
                                 <a class="h3" href="{% url 'film_details_view' film.id %}" style="text-decoration: none;">
                                     {{ film.title }} ({{ film.year }})
                                 </a>
-<!--Icons: edit, delete-->
+<!--Icon: edit-->
                                 <a class="btn" href="{% url 'edit_film_view' film.id %}">
                                     <i class="fa-regular fa-pen-to-square"></i>
-                                </a>
-
-                                <a class="btn"  href="{% url 'delete_film_view' film.id %}">
-                                    <i class="fa-regular fa-trash-can"></i>
                                 </a>
 <!--Stars-->
                                 <div style="float: right">
