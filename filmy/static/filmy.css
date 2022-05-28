@@ -12,7 +12,18 @@ h2 {
     color: #d2ccc6;
 }
 
-.film-poster {
+.film-poster-small {
     width: 150px;
+    cursor: pointer
 }
 
+.film-poster {
+    display: block;
+    width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.6);
+}

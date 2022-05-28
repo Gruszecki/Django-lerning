@@ -15,14 +15,14 @@ Including another URLconf
 """
 
 from django.urls import path
-from filmy.views import all_films_view, new_film_view, edit_film_view, delete_film_view, film_details_view, new_actor_view, add_actor_to_film_view
+from filmy import views
 
 urlpatterns = [
-    path('all/', all_films_view, name='all_films_view'),
-    path('new/', new_film_view, name='new_film_view'),
-    path('edit/<int:id>', edit_film_view, name='edit_film_view'),
-    path('delete/<int:id>', delete_film_view, name='delete_film_view'),
-    path('details/<int:id>', film_details_view, name='film_details_view'),
-    path('new_actor/', new_actor_view, name='new_actor_view'),
-    path('add_actor_to_film/<int:id>', add_actor_to_film_view, name='add_actor_to_film_view')
+    path('all/', views.all_films_view, name='all_films_view'),
+    path('new/', views.new_film_view, name='new_film_view'),
+    path('edit/<int:id>', views.edit_film_view, name='edit_film_view'),
+    path('delete/<int:id>', views.delete_film_view, name='delete_film_view'),
+    path('details/<int:id>', views.film_details_view, name='film_details_view'),
+    path('new_actor/', views.new_actor_view, name='new_actor_view'),
+    path('add_actor_to_film/<int:id>', views.add_actor_to_film_view, name='add_actor_to_film_view')
 ]

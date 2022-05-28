@@ -15,9 +15,58 @@
             </div>
         </h2>
 
-        <a href="{% url 'add_actor_to_film_view' film.id %}">
+        <a href="{% url 'edit_film_view' film.id %}">
+            <button class="btn btn-outline-dark">
+                Edit film
+                <i class="fa-regular fa-pen-to-square"></i>
+            </button>
+        </a>
+
+<!--Offcanvas: Add actors to film-->
+        <a href="#offcanvasAddActorToFilm" data-bs-toggle="offcanvas" role="button" aria-controls="offcanvasAddActorToFilm">
             <button class="btn btn-outline-dark">Add actors</button>
         </a>
+
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasAddActorToFilm" aria-labelledby="offcanvasAddActorToFilmLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasAddAcotrToFilmLabel">Add actors</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div align="center">
+                    <div class="container-sm" style="width: 50rem;" align="left">
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {% for actor in actors %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="actors" value={{ actor.id }} id={{ actor.id }} {% if actor in saved_actors %} checked {% endif %}>
+                                        <label class="form-check-label" name="actors" for={{ actor.id }}>
+                                            {{ actor.first_name }} {{actor.surname }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+
+                                <br>
+                                <button type="submit" class="btn btn-outline-dark" name="button_save_actors">
+                                    Save actors
+                                 </button>
+
+                            </form>
+                            <br>
+
+                            <a href="{% url 'new_actor_view' %}" style="color:#d2ccc6;">
+                                <button class="btn btn-outline-dark">Add new actor
+                                    <i class="fa-solid fa-person"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+<!--Add rating-->
         <br><br>
 
         <div class="card" style="width: 20rem; float: right;">
@@ -27,11 +76,12 @@
                     {% csrf_token %}
                     {{ rating_form|bootstrap }}
                     <br>
-                    <button type="submit" class="btn btn-outline-dark">Send</button>
+                    <button type="submit" class="btn btn-outline-dark" name="button_add_rating">Send</button>
                 </form>
             </div>
         </div>
 
+<!--Description-->
         Description:<br>
         {{ film.desc }}<br><br>
 
@@ -41,15 +91,37 @@
         Rating IMDB: {{ film.rating_imdb }}<br>
         <br>
 
-        <img src="/media/{{film.poster}}" class="film-poster">
-        <br>
+<!--Poster-->
+        <div>
+            <img src="/media/{{film.poster}}" class="film-poster-small" data-bs-toggle="modal" data-bs-target="#imagePreviewModal">
+        </div>
 
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagePreviewModalLabel">{{ film.title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="/media/{{film.poster}}" class="film-poster" data-bs-toggle="modal" data-bs-target="#imagePreviewModal">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+<!--Actors-->
         <br><br>
         <h5>Actors</h5>
-        {% for actor in actors %}
+        {% for actor in saved_actors %}
             {{ actor.first_name }} {{actor.surname }}<br>
         {% endfor %}
 
+<!--Reviews-->
         <br><br>
         <h5>Reviews</h5><hr>
 
@@ -61,7 +133,8 @@
             {% endfor %}
         {% endif %}
 
-        <br><br>
+<!--Button: back-->
+        <br>
         <a class="btn"  href="{% url 'all_films_view' %}">
             <i class="fa-solid fa-angles-left">  Back</i>
         </a>

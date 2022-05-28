@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import Film, AdditionalInfo, Rating, Actor
-from .forms import FilmForm, AdditionalInfoForm, RatingForm, ActorForm
 from django.contrib.auth.decorators import login_required
-from rest_framework import viewsets
+from django.shortcuts import render, get_object_or_404, redirect
+
+from .forms import FilmForm, AdditionalInfoForm, RatingForm, ActorForm
+from .models import Film, AdditionalInfo, Rating, Actor
 from .serializers import FilmSerializer, ActorSerializer
+
+from rest_framework import viewsets
 
 
 class FilmViewSet(viewsets.ModelViewSet):
@@ -33,7 +35,7 @@ def all_films_view(request):
     films = Film.objects.all()
     film_with_ratings = get_film_with_ratings(films)
 
-    return render(request, 'filmy.html', {'films_length': len(films), 'film_with_ratings': film_with_ratings})
+    return render(request, 'filmy.html', {'film_with_ratings': film_with_ratings})
 
 
 @login_required()
@@ -102,17 +104,18 @@ def get_film_reviews(film):
 
 def film_details_view(request, id):
     film = get_object_or_404(Film, pk=id)
-    actors = film.actors.all()
+    saved_actors = film.actors.all()
     reviews = get_film_reviews(film)
     avg_rating = get_avg_rating(film)
     rating_form = RatingForm(request.POST or None)
+    actors = Actor.objects.all().order_by('surname')
 
     try:
         info = AdditionalInfo.objects.get(film=film.id)
     except AdditionalInfo.DoesNotExist:
         info = None
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'button_add_rating' in request.POST:
         try:
             rating = rating_form.save(commit=False)
             rating.film = film
@@ -120,11 +123,29 @@ def film_details_view(request, id):
         except ValueError as err:
             print(err)
         finally:
-            rating_form = RatingForm(None)
-            avg_rating = get_avg_rating(film)
+            RatingForm(None)
+            get_avg_rating(film)
             return redirect(film_details_view, film.id)
 
-    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info, 'rating_form': rating_form, 'reviews': reviews, 'actors': actors})
+    if request.method == 'POST' and 'button_save_actors' in request.POST:
+        if request.user.is_authenticated:
+            selected_actors = request.POST.getlist("actors")
+            for actor in saved_actors:
+                if str(actor.id) not in selected_actors:
+                    film.actors.remove(Actor.objects.get(id=actor.id))
+                    film.save()
+            for actor_id in selected_actors:
+                film.actors.add(Actor.objects.get(id=actor_id))
+                film.save()
+
+            messages.success(request, f'Actors added to {film.title}.')
+            return redirect(film_details_view, film.id)
+        else:
+            messages.success(request, 'You must be logged in to perform this action.')
+
+    return render(request, 'film-details.html', {'film': film, 'rating': avg_rating, 'info': info,
+                                                     'rating_form': rating_form, 'reviews': reviews,
+                                                     'saved_actors': saved_actors, 'actors': actors})
 
 
 @login_required()

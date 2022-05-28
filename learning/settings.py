@@ -134,4 +134,4 @@ MEDIA_ROOT = 'my-media'
 # Custom login
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'all_films_view'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'all_films_view'

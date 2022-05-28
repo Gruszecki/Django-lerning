@@ -4,20 +4,25 @@
 
 {% block body %}
     {% if user.is_authenticated %}
-        Zalogowano jako: {{ user.username }}
+        Logged is as: {{ user.username }}
         <a class="btn" href="{% url 'logout' %}">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
         </a>
     {% else %}
-        <a href="{% url 'login' %}">Log in</a>
+        <a href="{% url 'login' %}">
+            <button class="btn btn-outline-dark">
+                Log in
+                <i class="fa-solid fa-key"></i>
+            </button>
+        </a>
     {% endif %}
 
     <hr>
 
     <div class="container" style="width: 64rem">
         <h1>All films from database</h1>
-
-        Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).<br>
+        This is film database which is partially in English and partially in Polish. Don't ask me why, I don't know.
+        Liczba filmów w bazie: {{ film_with_ratings|length }}.<br>
         <a class="btn" href="{% url 'new_film_view' %}" style="color:#d2ccc6;">
             Add new film
             <i class="fa-solid fa-film"></i>
@@ -37,12 +42,34 @@
             <div align="center">
                 <div class="card" style="width: 64rem" align="left">
                     <div class="card-body">
-                        <img src="/media/{{film.poster}}" class="film-poster" style="float: left">
+<!--Poster-->
+                    <div>
+                        <img src="/media/{{film.poster}}" style="float: left" class="film-poster-small" data-bs-toggle="modal" data-bs-target="#image{{film.id}}">
+                    </div>
+
+                    <div class="modal fade" id="image{{film.id}}" tabindex="-1" aria-labelledby="image{{film.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="image{{film.id}}Label">{{ film.title }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="/media/{{film.poster}}" class="film-poster" data-bs-toggle="modal" data-bs-target="#imagePreviewModal">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+<!--Film title-->
                         <div class="row">
                             <h3>
                                 <a class="h3" href="{% url 'film_details_view' film.id %}" style="text-decoration: none;">
                                     {{ film.title }} ({{ film.year }})
                                 </a>
+<!--Icons: edit, delete-->
                                 <a class="btn" href="{% url 'edit_film_view' film.id %}">
                                     <i class="fa-regular fa-pen-to-square"></i>
                                 </a>
@@ -50,11 +77,13 @@
                                 <a class="btn"  href="{% url 'delete_film_view' film.id %}">
                                     <i class="fa-regular fa-trash-can"></i>
                                 </a>
+<!--Stars-->
                                 <div style="float: right">
                                     {{ rating }} <i class="fa-solid fa-star"></i>
                                 </div>
                             </h3>
                         </div>
+<!--Film description-->
                         <div class="row">
                             <p class="card-text desc">{{ film.desc }}</p><br>
                         </div>
