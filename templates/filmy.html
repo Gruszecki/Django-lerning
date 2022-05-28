@@ -15,19 +15,20 @@
     <hr>
 
     <div class="container" style="width: 64rem">
-    <h1>All films from database</h1>
+        <h1>All films from database</h1>
 
-    Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).<br>
-    <a class="btn" href="{% url 'new_film_view' %}" style="color:#d2ccc6;">
-        Add new film
-        <i class="fa-solid fa-film"></i>
-    </a>
-    <a class="btn" href="{% url 'new_actor_view' %}" style="color:#d2ccc6;">
-        Add new actor
-        <i class="fa-solid fa-person"></i>
-    </a>
-    <br><br>
-        </div>
+        Bardzo cieszę się, że mogę Państwu przedstawić poniższe filmy (liczba filmów w bazie: {{ films|length }}).<br>
+        <a class="btn" href="{% url 'new_film_view' %}" style="color:#d2ccc6;">
+            Add new film
+            <i class="fa-solid fa-film"></i>
+        </a>
+        <a class="btn" href="{% url 'new_actor_view' %}" style="color:#d2ccc6;">
+            Add new actor
+            <i class="fa-solid fa-person"></i>
+        </a>
+        <br><br>
+    </div>
+
 
     {% if films_length == 0 %}
         <p>Baza filmów jest jeszcze pusta.</p>

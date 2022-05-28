@@ -10,7 +10,6 @@
         <div class="card-body">
             <h2>{{ film.title }}</h2><br><br>
 
-
             <form method="post">
                 {% csrf_token %}
                 {% for actor in actors %}
